@@ -1,37 +1,119 @@
 <html>
   <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css"
+    />
     <title>Date Interval</title>
     <style>
-      .container{
+      .row {
+        text-align: center;
+        width: 200px;
+      }
+      #start_date_input{
         text-align: center;
       }
-      #datepicker {
-        margin-left: 20px;
+      #end_date_input{
+        text-align: center;
       }
-      #datepicker_2 {
-        margin-left: 37px;
-      }
-      .btn {
-        padding: 5px;
-        background-color: blue;
+      #calculate {
+        background-color: #5454d3;
         color: white;
         border: none;
+      }
+      .box-result {
+        background-color: #5454d3;
+        border-radius: 5px;
+        color: white;
+        text-align: center;
+        width: 400px;
+      }
+      .result {
+        display: none;
       }
     </style>
   </head>
   <body>
     <div class="container">
-      <h2>Date Interval</h2>
-      <label>From:</label>
-      <input type="date" id="datepicker" />
-      <br /><br />
-      <label>To:</label>
-      <input type="date" id="datepicker_2" />
-      <br /><br />
-      <button class="btn">Calulate</button>
-      <!--Jquery library Start-->
-      <script src="./js/jquery-3.7.1.min.js"></script>
-      <!--Jquery library End-->
+      <div class="row">
+        <div class="col-6">
+          <h2>Date Interval</h2>
+          <label>From:</label>
+        </div>
+        <div class="col-6">
+          <div class="form-group">
+            <div class="input-group date" id="start_date">
+              <input type="text" class="form-control" id="start_date_input" />
+              <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-6">
+          <label>To:</label>
+        </div>
+        <div class="col-6">
+          <div class="form-group">
+            <div class="input-group date" id="end_date">
+              <input type="text" class="form-control" id="end_date_input" />
+              <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="btn" id="calculate">Calculate</button>
+      <div class="box-result">
+        <div class="result">
+          <h2>Date Interval Between</h2>
+          <h3>
+            <span id="start_date_output"></span> and
+            <span id="end_date_output"></span>
+          </h3>
+          <p>In years: <span id="result_years"></span></p>
+          <p>In months: <span id="result_months"></span></p>
+          <p>In weeks: <span id="result_weeks"></span></p>
+          <p>In days: <span id="result_days"></span></p>
+        </div>
+      </div>
+      <script>
+        $(document).ready(function () {
+          $("#start_date, #end_date").datetimepicker({
+            format: "MM/DD/YYYY",
+          });
+          $("#calculate").click(function () {
+            const startDate = new Date($("#start_date_input").val());
+            const endDate = new Date($("#end_date_input").val());
+
+            var timeDifference = endDate.getTime() - startDate.getTime();
+
+            var days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+            var months = Math.floor(days / 30.44);
+            var years = Math.floor(months / 12);
+            var weeks = Math.floor(days / 7);
+
+            $("#start_date_output").text($("#start_date_input").val());
+            $("#end_date_output").text($("#end_date_input").val());
+            $("#result_years").text(years);
+            $("#result_months").text(months);
+            $("#result_weeks").text(weeks);
+            $("#result_days").text(days);
+            $(".result").toggle();
+          });
+        });
+      </script>
     </div>
   </body>
 </html>
